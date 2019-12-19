@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .main {
+      max-width: 750px;
+      margin: 0 auto;
+      
+      height: 100vh;
+    }
+
+    .slider {
+      overflow: hidden;
+    }
+    ul {
+      list-style: none;
+      /* 启用弹性布局把li横向排列 */
+      display: flex;
+      /* ul要给足够的宽度让多个子元素横向排列 - 按照子元素的个数进行计算*/
+      width: 800%;
+      /* 添加一个过渡动画 */
+      transition: transform 400ms;
+        
+    }
+    li {
+      /* 让每个li占1份就行 */
+      flex:1;
+    }
+    img {
+      width: 100%;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="slider">
+      <ul>
+          
+        <!-- li*6>a[href=#]>img[src="./images/1.jpg"] -->
+        <li><a href="#"><img src="./images/6.jpg" alt=""></a></li> <!-- 障眼法，实际在视口一闪而过，移动展示的一直是中间六张图 -->
+        <li><a href="#"><img src="./images/1.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/2.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/3.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/4.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/5.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/6.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/1.jpg" alt=""></a></li> <!-- 障眼法，实际在视口一闪而过，移动展示的一直是中间六张图 -->
+      </ul>
+    </div>
+  </div>
+</body>
+<!-- 引入人家的类库，进行注册左右滑动事件 -->
+<script src="./zepto.js"></script>
+<script src="./touch.js"></script>
+<script>
+    var slider = document.querySelector('.slider');
+    var ul = document.querySelector('.slider>ul')
+    var imgWidth = slider.clientWidth;
+    //定义索引记录当前第几张,实际是从第二张图片开始展示
+    //所以一开始要让它先移动一张图片的距离
+    ul.style.transform = 'translate(' + -imgWidth + 'px)';
+    var currentIndex = 1;
+
+    //右滑事件
+    $('.slider').on('swipeLeft',function(){  
+        if(currentIndex == ul.children.length-1){
+               return;
+            }
+        currentIndex++;
+        ul.style.transform = 'translate(' + currentIndex*imgWidth*-1 + 'px)';
+    })
+
+    //右滚动到最后一张图片时瞬间回到第一张图片的位置(最后一张图片滑动动画结束后)
+    //最后一张图片滑动动画结束后
+    ul.addEventListener('transitionend',function(){
+        //如果右滑到（尽头）最后一张图片
+        if(currentIndex == ul.children.length-1){
+            //让它变为第二张(用户眼中第一张)
+            currentIndex = 1;
+            //先关掉过渡动画
+            ul.style.transitionDuration = '0s';
+            //再偷偷回到第一张图片的位置
+            ul.style.transform = 'translate(' + currentIndex*imgWidth*-1 + 'px)';
+            //然后再开启动画
+            //因为代码加载速度很快，所以要延迟一下执行
+            setTimeout(function(){
+                ul.style.transitionDuration = '400ms';
+            },10)
+        }
+        //如果左滑到（尽头）第一张图片
+        if(currentIndex == 0){
+            //让它回到倒数第二张（用户眼中第一张）
+            currentIndex = ul.children.length-2;
+            //关动画
+            ul.style.transitionDuration = '0s';
+            //回到倒数第二张
+            ul.style.transform = 'translate(' + currentIndex*imgWidth*-1 + 'px)';
+            //开启动画
+            setTimeout(function(){
+                ul.style.transitionDuration = '400ms';
+            },10)
+        }
+    })
+
+    //往左滑动
+    $('.slider').on('swipeRight',function(){
+        currentIndex--;
+        ul.style.transform = 'translate(' + currentIndex*imgWidth*-1 + 'px)';
+    })
+</script>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .main {
+      max-width: 750px;
+      margin: 0 auto;
+      
+      height: 100vh;
+    }
+
+    .slider {
+      overflow: hidden;
+    }
+    ul {
+      list-style: none;
+      /* 启用弹性布局把li横向排列 */
+      display: flex;
+      /* ul要给足够的宽度让多个子元素横向排列 - 按照子元素的个数进行计算*/
+      width: 400%;
+      /* 添加一个过渡动画 */
+      transition: all 400ms;
+        
+    }
+    li {
+      /* 让每个li占1份就行 */
+      flex:1;
+      transition: all 400ms linear;
+    }
+    img {
+      width: 100%;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="slider">
+      <ul>
+          
+        <!-- li*6>a[href=#]>img[src="./images/1.jpg"] -->
+        
+        <li><a href="#"><img src="./images/1.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/2.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/3.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/4.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/5.jpg" alt=""></a></li>
+        <li><a href="#"><img src="./images/6.jpg" alt=""></a></li>
+       
+      </ul>
+    </div>
+  </div>
+</body>
+<script src="./zepto.js"></script>
+<script src="./touch.js"></script>
+<script>
+    var slider = document.querySelector('.slider');
+    var list = document.querySelectorAll('.slider li');
+     list = Array.prototype.slice.call(list);
+     var ul = document.querySelector('ul');
+    
+    $('.slider').on('swipeLeft',function(){
+      console.log(1)
+        ul.innerHTML = '';
+        var first = list.shift();
+        list.push(first);
+        
+        for(i=0;i<list.length;i++){
+            ul.appendChild(list[i]);
+        }
+    })
+</script>
+</html>
